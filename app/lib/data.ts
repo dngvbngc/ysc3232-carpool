@@ -308,3 +308,26 @@ export async function getUser(email: string) {
     throw new Error('Failed to fetch user.');
   }
 }
+
+export async function fetchCommentsByPostId(postId: string) {
+  noStore();
+  try {
+    const comments = await sql<Comment[]>`
+      SELECT
+        comments.id,
+        comments.post_id,
+        comments.author_id,
+        users.name as author_name, // Join with users to get the name of the comment author
+        comments.content,
+        comments.comment_time
+      FROM comments
+      JOIN users ON comments.author_id = users.id
+      WHERE comments.post_id = ${postId}
+      ORDER BY comments.comment_time ASC`; // You might want to adjust the ordering
+
+    return comments.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch comments.');
+  }
+}
