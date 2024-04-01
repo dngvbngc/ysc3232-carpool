@@ -20,7 +20,7 @@ export default function Comments({
 
 	return (
 		<div className='mt-4 max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 pt-4'>
-			<h2 className='p-0 m-0 text-lg font-bold'>Comments</h2>
+			<h2 className='p-1 m-0 text-lg font-bold pb-4'>Comments</h2>
 			<div>
 				{coms.map((comment) => (
 					<div className='bg-slate-100 mb-2 p-2 rounded-md'>

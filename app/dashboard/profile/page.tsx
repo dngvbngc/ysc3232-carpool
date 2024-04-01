@@ -34,44 +34,44 @@ export default function UsersPage({
 
   return (
     <div className="w-full">
-    <div className="flex w-full items-center justify-between">
-      <h1 className={`${lusitana.className} text-2xl pt-5`}>Profile</h1>
-    </div>
-    <div style={{ marginBottom: '30px' }}></div>
-    <p className="mt-4 text-gray-600">This page displays the user profile, which includes the user&apos;s information, posts and liked/followed posts.</p>
-    <div style={{ marginBottom: '50px' }}></div>
-    <div style={styles.container}>
-      <div style={styles.profileInfo}>
-        <p><strong>Name:</strong> {userProfile.name}</p>
-        <p><strong>Email:</strong> {userProfile.email}</p>
+      <div className="w-full items-center justify-between hidden md:flex">
+        <h1 className={`${lusitana.className} text-2xl p-5`}>Profile</h1>
       </div>
-      <div style={styles.posts}>
-        <h2 className={`${lusitana.className}`}>Posts Authored</h2>
-        <ul>
-          {userProfile.postsAuthored.map(post => (
-            <li key={post.id} style={styles.post}>
-              <strong>{post.title}</strong>
-              <p>{post.content}</p>
-            </li>
-          ))}
-        </ul>
+
+      <div className='container mx-auto my-8 p-4 pt-0 pb-0'>
+				<div className='max-w-2xl mx-auto bg-white shadow-lg rounded-lg pl-6 pb-8 pt-3'>
+          <p className={`p-5 mr-5`}><strong>Name: </strong> {userProfile.name}</p>
+          <p className={`pl-5 mr-5`}><strong>Email: </strong> {userProfile.email}</p>
+        </div>
       </div>
-      <div style={styles.posts}>
-        <h2 className={`${lusitana.className}`}>Posts Liked/Followed</h2>
-        <ul>
-          {userProfile.postsHearted.map(post => (
-            <li key={post.id} style={styles.post}>
-              <strong>{post.title}</strong>
-              <p>{post.content}</p>
-            </li>
-          ))}
-        </ul>
+
+      <div className='container mx-auto my-8 p-4 pt-0 pb-0'>
+				<div className='max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6'>
+          <h2 className={`${lusitana.className} text-2xl p-5`}>Your Posts</h2>
+          <ul className={`pl-5 mr-5`}>
+            {userProfile.postsAuthored.map(post => (
+              <li className={`p-5`} key={post.id} style={styles.post}>
+                <strong className={`p-5`}>{post.title}</strong>
+                <p className={`pl-5`}>{post.content}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-      <div className="flex items-center pb-2 pt-6">
-          <ArrowPathIcon className="h-5 w-5 text-gray-500" />
-          <h3 className="ml-2 text-sm text-gray-500 ">Updated just now</h3>
+
+      <div className='container mx-auto my-8 p-4 pt-0 pb-0'>
+				<div className='max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6'>
+          <h2 className={`${lusitana.className} text-2xl p-5`}>Following</h2>
+          <ul className={`pl-5 mr-5`}>
+            {userProfile.postsHearted.map(post => (
+              <li key={post.id} style={styles.post}>
+                <strong className={`p-5`}>{post.title}</strong>
+                <p className={`pl-5`}>{post.content}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
     </div>
   );
 }
