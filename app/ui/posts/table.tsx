@@ -4,7 +4,10 @@ import { fetchFilteredPosts } from '@/app/lib/data';
 
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
-import { formatTimeForDisplay, reverseGeocode } from '@/app/lib/utils';
+import {
+	formatTimeForDisplay,
+	reverseGeocode,
+} from '@/app/lib/utils';
 
 export default async function PostsTable({
 	query,
@@ -14,14 +17,16 @@ export default async function PostsTable({
 	currentPage: number;
 }) {
 	const posts = await fetchFilteredPosts(query, currentPage);
-
+	const owner = 'User';
 	return (
 		<div className='mt-6 flow-root'>
 			<div className='inline-block min-w-full align-middle'>
 				<div className='rounded-lg bg-gray-100 md:bg-gray-50 p-2 md:pt-0'>
 					<div className='md:hidden'>
 						{posts?.map((post) => (
-							<div key={post.id} className='mb-2 w-full rounded-md bg-white p-4'>
+							<div
+								key={post.id}
+								className='mb-2 w-full rounded-md bg-white p-4'>
 								<div className='flex items-center justify-between pb-2 border-b'>
 									<div className='flex items-center'>
 										<UserCircleIcon className='w-8 mr-2' />
@@ -49,7 +54,7 @@ export default async function PostsTable({
 												How Many:
 											</h3>
 											<p className='text-md text-green-500 font-bold m-0'>
-												4
+												{post.carpoolers}
 											</p>
 										</div>
 										<div className='col-span-2'>
@@ -66,7 +71,10 @@ export default async function PostsTable({
 												From:
 											</h3>
 											<p className='text-md text-green-500 font-bold m-0'>
-												{reverseGeocode(post.start_latitude, post.start_longitude)}
+												{reverseGeocode(
+													post.start_latitude,
+													post.start_longitude
+												)}
 											</p>
 										</div>
 										<div className='col-span-3'>
@@ -74,15 +82,20 @@ export default async function PostsTable({
 												To:
 											</h3>
 											<p className='text-md text-green-500 font-bold m-0'>
-												{reverseGeocode(post.end_latitude, post.end_longitude)}
+												{reverseGeocode(
+													post.end_latitude,
+													post.end_longitude
+												)}
 											</p>
 										</div>
 									</div>
 								</Link>
-								<div className='flex justify-center gap-2 mt-1'>
-									<UpdatePost id={post.id} />
-									<DeletePost id={post.id} />
-								</div>
+								{post.name === owner && (
+									<div className='flex justify-center gap-2 mt-1'>
+										<UpdatePost id={post.id} />
+										<DeletePost id={post.id} />
+									</div>
+								)}
 							</div>
 						))}
 					</div>
@@ -151,7 +164,10 @@ export default async function PostsTable({
 											href={`/dashboard/posts/${post.id}`}
 											key={post.id}
 											className='mb-2 w-full'>
-											{reverseGeocode(post.start_latitude, post.start_longitude)}
+											{reverseGeocode(
+												post.start_latitude,
+												post.start_longitude
+											)}
 										</Link>
 									</td>
 									<td className='whitespace-nowrap px-3 py-3'>
@@ -159,7 +175,10 @@ export default async function PostsTable({
 											href={`/dashboard/posts/${post.id}`}
 											key={post.id}
 											className='mb-2 w-full'>
-											{reverseGeocode(post.end_latitude, post.end_longitude)}
+											{reverseGeocode(
+												post.end_latitude,
+												post.end_longitude
+											)}
 										</Link>
 									</td>
 									<td className='whitespace-nowrap px-3 py-3'>
