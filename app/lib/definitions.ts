@@ -83,9 +83,10 @@ export type Comment = {
 export type PostForm = {
   id: string;
   author_id: string;
-  start_location: GeoLocation;
-  end_location: GeoLocation;
-
+  start_latitude: number;
+  start_longitude: number;
+  end_latitude: number;
+  end_longitude: number;
   ride_time: string;
   post_time: string;
   ride_service: 'Grab' | 'Gojek' | 'Ryde' | 'ComfortDelGro' | 'TADA';

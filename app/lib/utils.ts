@@ -102,11 +102,17 @@ export const calculateEstimatedTravelTime = (distance: number, averageSpeed: num
 }; 
 
 export async function geocodeAddress(address : string) {
+
+  // Check if the address is provided and not empty
+  if (!address || address.trim() === '') {
+    return null;
+  }
+
   try {
     const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
       params: {
         address: address,
-        key: 'AIzaSyAK01h9k7fI3BflEgwN169OX6oWptyqSc0'
+        key: GOOGLE_API_KEY
       }
     });
 
@@ -139,7 +145,7 @@ export async function reverseGeocode(latitude: number, longitude: number) {
     const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
       params: {
         latlng: `${latitude},${longitude}`,
-        key: 'AIzaSyAK01h9k7fI3BflEgwN169OX6oWptyqSc0'
+        key: GOOGLE_API_KEY
       }
     });
 

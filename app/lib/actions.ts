@@ -62,8 +62,6 @@ export async function createPost(prevState: State, formData: FormData) {
       description: formData.get('description')
     });
 
-    console.log(validatedFields);
-
     // If form validation fails, return errors early. Otherwise, continue.
     if (!validatedFields.success) {
       return {
@@ -95,10 +93,6 @@ export async function createPost(prevState: State, formData: FormData) {
       };
     }
 
-    // Format the geolocation data for SQL POINT type
-    const formattedStartLocation = `point(${startGeoLocation.latitude}, ${startGeoLocation.longitude})`;
-    const formattedEndLocation = `point(${endGeoLocation.latitude}, ${endGeoLocation.longitude})`;
-
     // Insert data into the database
     try {
       await sql`
@@ -114,8 +108,8 @@ export async function createPost(prevState: State, formData: FormData) {
           status)
         VALUES (
           ${authorId}, 
-          ${formattedStartLocation}, 
-          ${formattedEndLocation}, 
+          point(${startGeoLocation.latitude}, ${startGeoLocation.longitude}), 
+          point(${endGeoLocation.latitude}, ${endGeoLocation.longitude}), 
           ${rideTimeSQL},
           ${currentTimeSQL},
           ${rideService},
@@ -134,10 +128,9 @@ export async function createPost(prevState: State, formData: FormData) {
 }
 
 // Use Zod to update the expected types
-const UpdatePost = PostSchema.omit({ id: true, postTime: true });
+const UpdatePost = PostSchema.omit({ id: true, authorId: true, postTime: true });
  
 // Update post
- 
 export async function updatePost(
   id: string,
   prevState: State,
@@ -146,7 +139,6 @@ export async function updatePost(
 
   // Validate form fields using Zod
   const validatedFields = UpdatePost.safeParse({
-    authorId: formData.get('authorId'),
     carpoolers: formData.get('carpoolers'),
     status: formData.get('status'),
     startLocation: formData.get('startLocation'),
@@ -166,7 +158,6 @@ export async function updatePost(
 
   // Prepare data for update in the database
   const { 
-    authorId, 
     carpoolers, 
     status, 
     startLocation, 
@@ -179,28 +170,23 @@ export async function updatePost(
   const currentTimeSQL = new Date().toISOString().replace('T', ' ').substring(0, 19);
 
   const startGeoLocation = await geocodeAddress(startLocation);
-    const endGeoLocation = await geocodeAddress(endLocation);
+  const endGeoLocation = await geocodeAddress(endLocation);
 
-    if (!startGeoLocation || !endGeoLocation) {
-      return {
-        message: 'Geocoding Error: Failed to resolve one or more addresses.',
-      };
-    }
-
-    // Format the geolocation data for SQL POINT type
-    const formattedStartLocation = `point(${startGeoLocation.latitude}, ${startGeoLocation.longitude})`;
-    const formattedEndLocation = `point(${endGeoLocation.latitude}, ${endGeoLocation.longitude})`;
+  if (!startGeoLocation || !endGeoLocation) {
+    return {
+      message: 'Geocoding Error: Failed to resolve one or more addresses.',
+    };
+  }
 
   // Insert data into the database
   try {
     await sql`
       UPDATE posts
       SET 
-        author_id = ${authorId}, 
         carpoolers = ${carpoolers}, 
         status = ${status},
-        start_location = ${formattedStartLocation},
-        end_location = ${formattedEndLocation},
+        start_location = point(${startGeoLocation.latitude}, ${startGeoLocation.longitude}), 
+        end_location = point(${endGeoLocation.latitude}, ${endGeoLocation.longitude}),
         ride_service = ${rideService},
         description = ${description},
         ride_time = ${rideTimeSQL},

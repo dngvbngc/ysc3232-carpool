@@ -1,6 +1,6 @@
 'use client';
 
-import { UserField, PostForm } from '@/app/lib/definitions';
+import { PostForm } from '@/app/lib/definitions';
 import {
 	CheckIcon,
 	ClockIcon,
@@ -11,14 +11,13 @@ import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { updatePost } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import { formatSQLTimeForInput } from '@/app/lib/utils';
+import { formatSQLTimeForInput, reverseGeocode } from '@/app/lib/utils';
+import React, { useState, useEffect } from 'react';
 
 export default function EditPostForm({
 	post,
-	users,
 }: {
 	post: PostForm;
-	users: UserField[];
 }) {
 	// this not necessary, and invoice.id is the argument need
 	const initialState = { message: null, errors: {} };
@@ -28,56 +27,32 @@ export default function EditPostForm({
 		initialState
 	);
 
+	const [startLocation, setStartLocation] = useState('');
+    const [endLocation, setEndLocation] = useState('');
+
+    useEffect(() => {
+        if (post.start_latitude && post.start_longitude) {
+            reverseGeocode(post.start_latitude, post.start_longitude)
+                .then(address => setStartLocation(address))
+                .catch(error => console.error(error));
+        }
+        if (post.end_latitude && post.end_longitude) {
+            reverseGeocode(post.end_latitude, post.end_longitude)
+                .then(address => setEndLocation(address))
+                .catch(error => console.error(error));
+        }
+    }, [post.start_latitude, post.start_longitude, post.end_latitude, post.end_longitude]);
+
 	return (
 		<form action={dispatch}>
 			<div className='rounded-md bg-gray-50 p-4 md:p-6'>
-				{/* Author Name */}
-				<div className='mb-4'>
-					<label
-						htmlFor='customer'
-						className='mb-2 block text-sm font-medium'>
-						Choose author
-					</label>
-					<div className='relative'>
-						<select
-							id='authorId'
-							name='authorId'
-							className='peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500'
-							defaultValue={post.author_id}
-							aria-describedby='author-error'>
-							<option
-								value=''
-								disabled>
-								Select an author
-							</option>
-							{users.map((user) => (
-								<option
-									key={user.id}
-									value={user.id}>
-									{user.name}
-								</option>
-							))}
-						</select>
-						<UserCircleIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500' />
-					</div>
-					{state.errors?.authorId ? (
-						<div
-							id='author-error'
-							aria-live='polite'
-							className='mt-2 text-sm text-red-500'>
-							{state.errors.authorId.map((error: string) => (
-								<p key={error}>{error}</p>
-							))}
-						</div>
-					) : null}
-				</div>
 
 				{/* Carpooler Number */}
 				<div className='mb-4'>
 					<label
 						htmlFor='carpoolers'
 						className='mb-2 block text-sm font-medium'>
-						Choose the number of people you are looking for
+						Choose the number of people you are looking for:
 					</label>
 					<div className='relative mt-2 rounded-md'>
 						<div className='relative'>
@@ -172,7 +147,7 @@ export default function EditPostForm({
 								id='startLocation'
 								name='startLocation'
 								type='text'
-								defaultValue={post.start_location}
+								defaultValue={startLocation}
 								className='peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500'
 								aria-describedby='start-location-error'
 							/>
@@ -202,7 +177,7 @@ export default function EditPostForm({
 								id='endLocation'
 								name='endLocation'
 								type='text'
-								defaultValue={post.end_location}
+								defaultValue={endLocation}
 								className='peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500'
 								aria-describedby='end-location-error'
 							/>

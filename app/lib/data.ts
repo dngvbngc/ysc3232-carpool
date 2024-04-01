@@ -10,8 +10,10 @@ import {
   UsersTable,
   CurrentPost
 } from './definitions';
-import { formatCurrency, geocodeAddress } from './utils';
+import { geocodeAddress } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
+const DELTA_LAT_KM = 0.05; 
+const DELTA_LON_KM = 0.05;
 
 export async function fetchLatestPosts() {
   noStore();
@@ -99,14 +101,11 @@ export async function fetchFilteredPosts(query: string, currentPage: number) {
       FROM posts
       JOIN users ON posts.author_id = users.id
       WHERE (
-        earth_distance(
-          ll_to_earth(start_latitude, start_longitude),
-          ll_to_earth(${searchLocation.latitude}, ${searchLocation.longitude})
-        ) < 100 OR
-        earth_distance(
-          ll_to_earth(end_latitude, end_longitude),
-          ll_to_earth(${searchLocation.latitude}, ${searchLocation.longitude})
-        ) < 100
+        (split_part(substr(trim(start_location::text, '()'), 1), ',', 1)::float BETWEEN ${searchLocation.latitude - DELTA_LAT_KM} AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
+        (split_part(substr(trim(start_location::text, '()'), 1), ',', 2)::float BETWEEN ${searchLocation.longitude - DELTA_LON_KM} AND ${searchLocation.longitude + DELTA_LON_KM})
+      ) OR (
+        (split_part(substr(trim(end_location::text, '()'), 1), ',', 1)::float BETWEEN ${searchLocation.latitude - DELTA_LAT_KM} AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
+        (split_part(substr(trim(end_location::text, '()'), 1), ',', 2)::float BETWEEN ${searchLocation.longitude - DELTA_LON_KM} AND ${searchLocation.longitude + DELTA_LON_KM})
       )
       ORDER BY posts.post_time DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
@@ -153,18 +152,11 @@ export async function fetchPostsPages(query: string) {
       FROM posts
       JOIN users ON posts.author_id = users.id
       WHERE (
-        earth_distance(
-          ll_to_earth(
-            (substring(start_location::text from 1 for position(',' in start_location::text)-1))::float, 
-            (substring(start_location::text from position(',' in start_location::text)+1))::float),
-          ll_to_earth(${searchLocation.latitude}, ${searchLocation.longitude})
-        ) < 100 OR
-        earth_distance(
-          ll_to_earth(
-            (substring(end_location::text from 1 for position(',' in end_location::text)-1))::float, 
-            (substring(end_location::text from position(',' in end_location::text)+1))::float),
-          ll_to_earth(${searchLocation.latitude}, ${searchLocation.longitude})
-        ) < 100
+        (split_part(substr(trim(start_location::text, '()'), 1), ',', 1)::float BETWEEN ${searchLocation.latitude - DELTA_LAT_KM} AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
+        (split_part(substr(trim(start_location::text, '()'), 1), ',', 2)::float BETWEEN ${searchLocation.longitude - DELTA_LON_KM} AND ${searchLocation.longitude + DELTA_LON_KM})
+      ) OR (
+        (split_part(substr(trim(end_location::text, '()'), 1), ',', 1)::float BETWEEN ${searchLocation.latitude - DELTA_LAT_KM} AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
+        (split_part(substr(trim(end_location::text, '()'), 1), ',', 2)::float BETWEEN ${searchLocation.longitude - DELTA_LON_KM} AND ${searchLocation.longitude + DELTA_LON_KM})
       )
     `;
   } else {
