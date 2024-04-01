@@ -303,3 +303,59 @@ export async function createUser(prevState: UserState, formData: FormData) {
     // Sign in and redirect the user.
     redirect('/');
 }
+
+const CommentSchema = z.object({
+  postId: z.string({
+    invalid_type_error: 'Please select a post.',
+  }),
+  authorId: z.string({
+    invalid_type_error: 'Please select an author.',
+  }),
+  content: z.string().min(1, {
+    message: 'Please enter a comment.',
+  }),
+  commentTime: z.string(), // Assuming comment time will be auto-generated, hence not required from the client side
+});
+
+export async function createComment(prevState: State, formData: FormData) {
+  // Extract comment data from FormData
+  const commentData = {
+    postId: formData.get('postId'),
+    authorId: formData.get('authorId'),
+    content: formData.get('content'),
+    // Generate comment time on the server to ensure consistency
+    commentTime: new Date().toISOString().replace('T', ' ').substring(0, 19),
+  };
+
+  // Validate comment data using Zod
+  const validatedComment = CommentSchema.safeParse(commentData);
+
+  if (!validatedComment.success) {
+    return {
+      errors: validatedComment.error.flatten().fieldErrors,
+      message: 'Validation Failed. Failed to Create Comment.',
+    };
+  }
+
+  // Insert validated comment into the database
+  try {
+    await sql`
+      INSERT INTO comments (
+        post_id,
+        author_id,
+        content,
+        comment_time)
+      VALUES (
+        ${validatedComment.data.postId}, 
+        ${validatedComment.data.authorId}, 
+        ${validatedComment.data.content}, 
+        ${validatedComment.data.commentTime})`;
+    
+    // Optionally, revalidate or update related data/cache
+    revalidatePath(`/dashboard/posts/${validatedComment.data.postId}`);
+    return { message: 'Comment successfully created.' };
+  } catch (error) {
+    console.error('Database Error:', error);
+    return { message: 'Database Error: Failed to Create Comment.' };
+  }
+}
