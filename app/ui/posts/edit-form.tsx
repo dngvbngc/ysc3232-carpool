@@ -6,6 +6,7 @@ import {
 	ClockIcon,
 	CurrencyDollarIcon,
 	UserCircleIcon,
+	UserGroupIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
@@ -66,7 +67,7 @@ export default function EditPostForm({
 								className='peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500'
 								aria-describedby='carpooler-error'
 							/>
-							<CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
+							<UserGroupIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
 						</div>
 					</div>
 					{state.errors?.carpoolers ? (
@@ -151,7 +152,7 @@ export default function EditPostForm({
 								className='peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500'
 								aria-describedby='start-location-error'
 							/>
-							<CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
+							{/* <CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' /> */}
 						</div>
 					</div>
 					{state.errors?.startLocation ? (
@@ -181,7 +182,7 @@ export default function EditPostForm({
 								className='peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500'
 								aria-describedby='end-location-error'
 							/>
-							<CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
+							{/* <CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' /> */}
 						</div>
 					</div>
 					{state.errors?.endLocation ? (
@@ -246,7 +247,7 @@ export default function EditPostForm({
 						name='rideTime'
 						type='datetime-local'
 						defaultValue={formatSQLTimeForInput(post.ride_time)}
-						className='block w-full rounded-md border border-gray-200 py-2 px-3 text-sm outline-2'
+						className='block w-full rounded-md border border-gray-200 py-2 px-3 text-sm outline-2 pl-10'
 						aria-describedby='ride-time-error'
 					/>
 				</div>
@@ -277,7 +278,7 @@ export default function EditPostForm({
 								defaultValue={post.description}
 								className='peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500'
 							/>
-							<CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
+							{/* <CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' /> */}
 						</div>
 					</div>
 					{state.message ? (

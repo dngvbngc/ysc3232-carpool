@@ -106,6 +106,8 @@ export async function fetchFilteredPosts(query: string, currentPage: number) {
       ) OR (
         (split_part(substr(trim(end_location::text, '()'), 1), ',', 1)::float BETWEEN ${searchLocation.latitude - DELTA_LAT_KM} AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
         (split_part(substr(trim(end_location::text, '()'), 1), ',', 2)::float BETWEEN ${searchLocation.longitude - DELTA_LON_KM} AND ${searchLocation.longitude + DELTA_LON_KM})
+      ) OR (
+        users.name ILIKE ${`%${query}%`}
       )
       ORDER BY posts.post_time DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
@@ -126,6 +128,7 @@ export async function fetchFilteredPosts(query: string, currentPage: number) {
         posts.status
       FROM posts
       JOIN users ON posts.author_id = users.id
+      WHERE users.name ILIKE ${`%${query}%`}
       ORDER BY posts.post_time DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
