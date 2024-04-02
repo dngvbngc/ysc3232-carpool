@@ -145,7 +145,7 @@ export default async function PostsTable({
 											key={post.id}
 											className='mb-2 w-full'>
 											<div className='flex items-center gap-3'>
-												<p>{post.name}</p>
+												<p>{post.name.split(' ')[0]}</p>
 											</div>
 										</Link>
 									</td>

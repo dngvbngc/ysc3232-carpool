@@ -24,7 +24,7 @@ export const formatSQLTimeForInput = (
 export const formatTimeForDisplay = (
   timestamp: string
 ) => {
-  return timestamp.split(/:\d{2} G/)[0];
+  return timestamp.split(/:\d{2} G/)[0].substring(4).replace(/2024/, '24');
 };
 
 export const formatDateToLocal = (
@@ -150,7 +150,7 @@ export async function reverseGeocode(latitude: number, longitude: number) {
     });
 
     if (response.data.status === 'OK') {
-      return response.data.results[0].formatted_address;
+      return response.data.results[0].formatted_address.replace(/,?\s*\d+$/, '').replace(/#/, '').replace(/,? Singapore/, '').replace(/\d+ \d+-\d+\s*,/, '').replace(/\d+-\d+/, '').replace(/,? Singapore/, '');
     } else {
       console.error('Reverse Geocoding failed:', response.data.status);
       return "Address Not Found";
