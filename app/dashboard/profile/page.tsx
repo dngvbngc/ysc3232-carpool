@@ -1,8 +1,5 @@
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { Metadata } from "next";
-import { Suspense } from "react";
 import { lusitana } from "@/app/ui/fonts";
-import { PostsTableSkeleton } from "@/app/ui/skeletons";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -42,10 +39,6 @@ export default function UsersPage({
 
   return (
     <div className='w-full'>
-      <div className='w-full items-center justify-between hidden md:flex'>
-        <h1 className={`${lusitana.className} text-2xl p-5`}>Profile</h1>
-      </div>
-
       <div className='container mx-auto my-8 p-4 pt-0 pb-0'>
         <div className='max-w-2xl mx-auto bg-white shadow-lg rounded-lg pl-6 pb-8 pt-3'>
           <p className={`p-5 mr-5`}>

@@ -26,9 +26,6 @@ export default async function Page({
 
   return (
     <div className='w-full'>
-      <div className='hidden md:flex w-full items-center justify-between'>
-        <h1 className={`${lusitana.className} text-2xl`}>Posts</h1>
-      </div>
       <div className='flex items-center justify-between gap-2 md:mt-8 bg-white mx-[-8px] px-[18px] pb-4'>
         <Search placeholder='Search posts...' />
         <CreatePost />

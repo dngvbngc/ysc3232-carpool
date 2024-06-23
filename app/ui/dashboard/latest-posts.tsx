@@ -23,39 +23,35 @@ export default async function LastestPosts() {
             );
 
             return (
-              <Link
-                href={`/dashboard/posts/${post.id}`}
+              <div
                 key={post.id}
-                className='mb-2 w-full'
+                className={clsx(
+                  "flex flex-row items-center justify-between py-4",
+                  {
+                    "border-t": i !== 0,
+                  }
+                )}
               >
-                <div
-                  key={post.id}
-                  className={clsx(
-                    "flex flex-row items-center justify-between py-4",
-                    {
-                      "border-t": i !== 0,
-                    }
-                  )}
-                >
-                  <div className='flex items-center'>
-                    <div className='min-w-0'>
-                      <p className='font-bold text-sm md:text-base'>
+                <div className='flex items-center'>
+                  <div className='min-w-0'>
+                    <p className='font-bold text-sm md:text-base'>
+                      <Link href={`/dashboard/posts/${post.id}`} key={post.id}>
                         {reverseGeocode(
                           post.start_latitude,
                           post.start_longitude
                         )}{" "}
                         &#8594;{" "}
                         {reverseGeocode(post.end_latitude, post.end_longitude)}
-                      </p>
-                    </div>
+                      </Link>
+                    </p>
                   </div>
-                  <p
-                    className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
-                  >
-                    {rideTimeFormatted}
-                  </p>
                 </div>
-              </Link>
+                <p
+                  className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
+                >
+                  {rideTimeFormatted}
+                </p>
+              </div>
             );
           })}
         </div>
