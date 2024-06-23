@@ -1,27 +1,39 @@
-import '@/app/ui/global.css';
-import { inter } from '@/app/ui/fonts';
-import { Metadata } from 'next';
- 
+import "@/app/ui/global.css";
+import { inter } from "@/app/ui/fonts";
+import { Metadata } from "next";
+
 export const metadata: Metadata = {
   title: {
-    template: '%s | Carpool',
-    default: 'Carpool',
+    template: "%s | Carpool",
+    default: "Carpool",
   },
-  description: 'Sharing is CARing! Look no further to share your ride and care for your wallet!',
-  metadataBase: new URL('https://nextjs-dashboard-acme.vercel.app'),
-  authors: [{name: 'Mario Gonzalez', url:'https://www.linkedin.com/in/lllariogonzalez'}],
-  keywords: ['Next.js 14', 'Acme', 'Dashboard', 'nextjs.org/learn', 'Server Actions'],
+  description:
+    "Sharing is CARing! Look no further to share your ride and care for your wallet!",
+  metadataBase: new URL("https://nextjs-dashboard-acme.vercel.app"),
+  authors: [
+    {
+      name: "Mario Gonzalez",
+      url: "https://www.linkedin.com/in/lllariogonzalez",
+    },
+  ],
+  keywords: [
+    "Next.js 14",
+    "Acme",
+    "Dashboard",
+    "nextjs.org/learn",
+    "Server Actions",
+  ],
   openGraph: {
-    title: 'Acme Dashboard',
-    description: 'The official Next.js Learn Dashboard built with App Router.',
-    url: 'https://nextjs-dashboard-acme.vercel.app',
-    type: 'website',
+    title: "Acme Dashboard",
+    description: "The official Next.js Learn Dashboard built with App Router.",
+    url: "https://nextjs-dashboard-acme.vercel.app",
+    type: "website",
   },
   twitter: {
-    site: '@acme',
-    description:'The official Next.js Learn Dashboard built with App Router.',
-    title:'Acme Dashboard by @lllariogonzalez',
-    creator:'@lllariogonzalez',
+    site: "@acme",
+    description: "The official Next.js Learn Dashboard built with App Router.",
+    title: "Acme Dashboard by @lllariogonzalez",
+    creator: "@lllariogonzalez",
   },
 };
 
@@ -31,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <body className={`${inter.className} antialiased`}>{children}</body>
     </html>
   );

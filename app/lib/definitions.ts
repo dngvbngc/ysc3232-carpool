@@ -17,10 +17,10 @@ export type Post = {
   end_location: GeoLocation;
   ride_time: string;
   post_time: string;
-  ride_service: 'Grab' | 'Gojek' | 'Ryde' | 'ComfortDelGro' | 'TADA';
+  ride_service: "Grab" | "Gojek" | "Ryde" | "ComfortDelGro" | "TADA";
   description: string;
   carpoolers: number;
-  status: 'open' | 'closed';
+  status: "open" | "closed";
 };
 
 export type LastestPost = {
@@ -32,10 +32,10 @@ export type LastestPost = {
   end_longitude: number;
   ride_time: string;
   post_time: string;
-  ride_service: 'Grab' | 'Gojek' | 'Ryde' | 'ComfortDelGro' | 'TADA';
+  ride_service: "Grab" | "Gojek" | "Ryde" | "ComfortDelGro" | "TADA";
   description: string;
   carpoolers: number;
-  status: 'open' | 'closed';
+  status: "open" | "closed";
 };
 
 export type CurrentPost = {
@@ -49,10 +49,10 @@ export type CurrentPost = {
   end_longitude: number;
   ride_time: string;
   post_time: string;
-  ride_service: 'Grab' | 'Gojek' | 'Ryde' | 'ComfortDelGro' | 'TADA';
+  ride_service: "Grab" | "Gojek" | "Ryde" | "ComfortDelGro" | "TADA";
   description: string;
   carpoolers: number;
-  status: 'open' | 'closed';
+  status: "open" | "closed";
 };
 
 export type PostsTable = {
@@ -66,10 +66,10 @@ export type PostsTable = {
   end_longitude: number;
   ride_time: string;
   post_time: string;
-  ride_service: 'Grab' | 'Gojek' | 'Ryde' | 'ComfortDelGro' | 'TADA';
+  ride_service: "Grab" | "Gojek" | "Ryde" | "ComfortDelGro" | "TADA";
   description: string;
   carpoolers: number;
-  status: 'open' | 'closed';
+  status: "open" | "closed";
 };
 
 export type Comment = {
@@ -89,10 +89,10 @@ export type PostForm = {
   end_longitude: number;
   ride_time: string;
   post_time: string;
-  ride_service: 'Grab' | 'Gojek' | 'Ryde' | 'ComfortDelGro' | 'TADA';
+  ride_service: "Grab" | "Gojek" | "Ryde" | "ComfortDelGro" | "TADA";
   description: string;
   carpoolers: number;
-  status: 'open' | 'closed';
+  status: "open" | "closed";
 };
 
 export type UserField = {

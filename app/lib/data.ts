@@ -1,4 +1,4 @@
-import { sql } from '@vercel/postgres';
+import { sql } from "@vercel/postgres";
 import {
   User,
   Post,
@@ -8,11 +8,11 @@ import {
   PostForm,
   UserField,
   UsersTable,
-  CurrentPost
-} from './definitions';
-import { geocodeAddress } from './utils';
-import { unstable_noStore as noStore } from 'next/cache';
-const DELTA_LAT_KM = 0.05; 
+  CurrentPost,
+} from "./definitions";
+import { geocodeAddress } from "./utils";
+import { unstable_noStore as noStore } from "next/cache";
+const DELTA_LAT_KM = 0.05;
 const DELTA_LON_KM = 0.05;
 
 export async function fetchLatestPosts() {
@@ -37,8 +37,8 @@ export async function fetchLatestPosts() {
 
     return data.rows;
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch the latest posts.');
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch the latest posts.");
   }
 }
 
@@ -70,8 +70,8 @@ export async function fetchCardData() {
       totalClosedPosts,
     };
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch card data.');
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch card data.");
   }
 }
 
@@ -101,11 +101,19 @@ export async function fetchFilteredPosts(query: string, currentPage: number) {
       FROM posts
       JOIN users ON posts.author_id = users.id
       WHERE (
-        (split_part(substr(trim(start_location::text, '()'), 1), ',', 1)::float BETWEEN ${searchLocation.latitude - DELTA_LAT_KM} AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
-        (split_part(substr(trim(start_location::text, '()'), 1), ',', 2)::float BETWEEN ${searchLocation.longitude - DELTA_LON_KM} AND ${searchLocation.longitude + DELTA_LON_KM})
+        (split_part(substr(trim(start_location::text, '()'), 1), ',', 1)::float BETWEEN ${
+          searchLocation.latitude - DELTA_LAT_KM
+        } AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
+        (split_part(substr(trim(start_location::text, '()'), 1), ',', 2)::float BETWEEN ${
+          searchLocation.longitude - DELTA_LON_KM
+        } AND ${searchLocation.longitude + DELTA_LON_KM})
       ) OR (
-        (split_part(substr(trim(end_location::text, '()'), 1), ',', 1)::float BETWEEN ${searchLocation.latitude - DELTA_LAT_KM} AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
-        (split_part(substr(trim(end_location::text, '()'), 1), ',', 2)::float BETWEEN ${searchLocation.longitude - DELTA_LON_KM} AND ${searchLocation.longitude + DELTA_LON_KM})
+        (split_part(substr(trim(end_location::text, '()'), 1), ',', 1)::float BETWEEN ${
+          searchLocation.latitude - DELTA_LAT_KM
+        } AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
+        (split_part(substr(trim(end_location::text, '()'), 1), ',', 2)::float BETWEEN ${
+          searchLocation.longitude - DELTA_LON_KM
+        } AND ${searchLocation.longitude + DELTA_LON_KM})
       ) OR (
         users.name ILIKE ${`%${query}%`}
       )
@@ -138,8 +146,8 @@ export async function fetchFilteredPosts(query: string, currentPage: number) {
     const posts = await postsQuery;
     return posts.rows;
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch posts.');
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch posts.");
   }
 }
 
@@ -155,11 +163,19 @@ export async function fetchPostsPages(query: string) {
       FROM posts
       JOIN users ON posts.author_id = users.id
       WHERE (
-        (split_part(substr(trim(start_location::text, '()'), 1), ',', 1)::float BETWEEN ${searchLocation.latitude - DELTA_LAT_KM} AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
-        (split_part(substr(trim(start_location::text, '()'), 1), ',', 2)::float BETWEEN ${searchLocation.longitude - DELTA_LON_KM} AND ${searchLocation.longitude + DELTA_LON_KM})
+        (split_part(substr(trim(start_location::text, '()'), 1), ',', 1)::float BETWEEN ${
+          searchLocation.latitude - DELTA_LAT_KM
+        } AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
+        (split_part(substr(trim(start_location::text, '()'), 1), ',', 2)::float BETWEEN ${
+          searchLocation.longitude - DELTA_LON_KM
+        } AND ${searchLocation.longitude + DELTA_LON_KM})
       ) OR (
-        (split_part(substr(trim(end_location::text, '()'), 1), ',', 1)::float BETWEEN ${searchLocation.latitude - DELTA_LAT_KM} AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
-        (split_part(substr(trim(end_location::text, '()'), 1), ',', 2)::float BETWEEN ${searchLocation.longitude - DELTA_LON_KM} AND ${searchLocation.longitude + DELTA_LON_KM})
+        (split_part(substr(trim(end_location::text, '()'), 1), ',', 1)::float BETWEEN ${
+          searchLocation.latitude - DELTA_LAT_KM
+        } AND ${searchLocation.latitude + DELTA_LAT_KM}) AND
+        (split_part(substr(trim(end_location::text, '()'), 1), ',', 2)::float BETWEEN ${
+          searchLocation.longitude - DELTA_LON_KM
+        } AND ${searchLocation.longitude + DELTA_LON_KM})
       )
     `;
   } else {
@@ -169,14 +185,15 @@ export async function fetchPostsPages(query: string) {
 
   try {
     const countResult = await countQuery;
-    const totalPages = Math.ceil(Number(countResult.rows[0].count) / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(
+      Number(countResult.rows[0].count) / ITEMS_PER_PAGE
+    );
     return totalPages;
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch total number of posts.');
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch total number of posts.");
   }
 }
-
 
 export async function fetchPostById(id: string) {
   noStore();
@@ -200,12 +217,12 @@ export async function fetchPostById(id: string) {
     `;
 
     const post = data.rows.map((post) => ({
-      ...post
+      ...post,
     }));
 
     return post[0];
   } catch (error) {
-    console.error('Database Error:', error);
+    console.error("Database Error:", error);
   }
 }
 
@@ -234,12 +251,12 @@ export async function fetchCurrentPost(id: string) {
     `;
 
     const post = data.rows.map((post) => ({
-      ...post
+      ...post,
     }));
 
     return post[0];
   } catch (error) {
-    console.error('Database Error:', error);
+    console.error("Database Error:", error);
   }
 }
 
@@ -257,8 +274,8 @@ export async function fetchUsers() {
     const users = data.rows;
     return users;
   } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch all users.');
+    console.error("Database Error:", err);
+    throw new Error("Failed to fetch all users.");
   }
 }
 
@@ -288,8 +305,8 @@ export async function fetchFilteredUsers(query: string) {
 
     return users;
   } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch user table.');
+    console.error("Database Error:", err);
+    throw new Error("Failed to fetch user table.");
   }
 }
 
@@ -299,8 +316,8 @@ export async function getUser(email: string) {
     const user = await sql`SELECT * from USERS where email=${email}`;
     return user.rows[0] as User;
   } catch (error) {
-    console.error('Failed to fetch user:', error);
-    throw new Error('Failed to fetch user.');
+    console.error("Failed to fetch user:", error);
+    throw new Error("Failed to fetch user.");
   }
 }
 
@@ -322,7 +339,7 @@ export async function fetchCommentsByPostId(postId: string) {
 
     return comments.rows;
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch comments.');
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch comments.");
   }
 }
