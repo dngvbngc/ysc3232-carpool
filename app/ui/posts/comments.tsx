@@ -19,7 +19,10 @@ export default function Comments({ comment }: { comment: Comment[] }) {
       <h2 className='p-1 m-0 text-lg font-bold pb-4'>Comments</h2>
       <div>
         {coms.map((comment) => (
-          <div key={comment.text} className='bg-slate-100 mb-2 p-2 rounded-md'>
+          <div
+            key={comment.author}
+            className='bg-slate-100 mb-2 p-2 rounded-md'
+          >
             <h3 className='font-bold text-gray-600'>{comment.author}</h3>
             <p>{comment.text}</p>
           </div>
